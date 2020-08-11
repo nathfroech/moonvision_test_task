@@ -1,0 +1,30 @@
+[MASTER]
+ignore=env,migrations,tests
+load-plugins=pylint_django
+
+[FORMAT]
+max-line-length=120
+
+[MESSAGES CONTROL]
+# Rule is too annoying to follow it strictly
+# C0103 invalid-name: Used when the name doesn't match the regular expression associated to its type
+#   (constant, variable, class...).
+
+# Docstrings are not required (but advisable)
+# C0111 missing-docstring: Used when a module, function, class or method has no docstring.
+
+# If I am disabling the warning - I obviously don't want to receive any messages about it
+# I0011 locally-disabled: Used when an inline option disables a message or a messages category.
+
+# Sometimes it is more clear to have `else` branch. Just be reasonable.
+# R1705 no-else-return: Used in order to highlight an unnecessary block of code following an if containing a return
+#   statement. As such, it will warn when it encounters an else following a chain of ifs, all of them containing a
+#   return statement.
+
+# Such comments are not always refer to the commit which adds them.
+# W0511 fixme: Used when a warning note as FIXME or XXX is detected.
+
+disable=invalid-name,missing-docstring,locally-disabled,no-else-return,fixme
+
+[DESIGN]
+max-parents=13

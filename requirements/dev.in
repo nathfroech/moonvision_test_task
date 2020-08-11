@@ -1,0 +1,33 @@
+# Requirements that are needed for development or testing environments: test tools, linters, compilers and so on
+
+-r ./base.in
+
+pip-tools
+
+# Linters
+# ------------------------------------------------------------------------------
+pre-commit
+yamllint
+restructuredtext-lint
+# Pygments is required for restructuredtext-lint but is not being installed with it
+pygments
+mypy
+
+wemake-python-styleguide
+flake8-django
+yesqa
+pylint-django
+
+# Tests
+# ------------------------------------------------------------------------------
+pytest
+pytest-cov
+pytest-django
+PyHamcrest
+model_bakery
+django-coverage-plugin
+
+# Django
+# ------------------------------------------------------------------------------
+django-extensions
+Werkzeug
