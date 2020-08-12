@@ -93,6 +93,7 @@ if PROJECT_ENVIRONMENT == ENVIRONMENT_DEBUG:
     ]
 LOCAL_APPS = [
     'moonvision.users.apps.UsersAppConfig',
+    'moonvision.image_classification.apps.AppConfig',
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = LOCAL_APPS + THIRD_PARTY_APPS + DJANGO_APPS

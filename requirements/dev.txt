@@ -52,6 +52,7 @@ packaging==20.4           # via pytest
 pathspec==0.8.0           # via yamllint
 pbr==5.4.5                # via stevedore
 pep8-naming==0.9.1        # via wemake-python-styleguide
+pillow==7.2.0             # via -r requirements/./base.in
 pip-tools==5.3.1          # via -r requirements/dev.in
 pluggy==0.13.1            # via pytest
 pre-commit==2.6.0         # via -r requirements/dev.in

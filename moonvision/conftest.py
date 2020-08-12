@@ -1,7 +1,7 @@
 import pytest
-from model_bakery import baker
 
-from django.test import RequestFactory
+from model_bakery import baker
+from rest_framework.test import APIRequestFactory
 
 from moonvision.users.models import User
 
@@ -17,5 +17,5 @@ def user() -> User:
 
 
 @pytest.fixture
-def request_factory() -> RequestFactory:
-    return RequestFactory()
+def api_request_factory() -> APIRequestFactory:
+    return APIRequestFactory()

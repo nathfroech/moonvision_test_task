@@ -16,6 +16,9 @@ max-line-length=120
 # If I am disabling the warning - I obviously don't want to receive any messages about it
 # I0011 locally-disabled: Used when an inline option disables a message or a messages category.
 
+# It is not always good to follow this rule.
+# R0201 no-self-use: Used when a method doesn't use its bound instance, and so could be written as a function.
+
 # Sometimes it is more clear to have `else` branch. Just be reasonable.
 # R1705 no-else-return: Used in order to highlight an unnecessary block of code following an if containing a return
 #   statement. As such, it will warn when it encounters an else following a chain of ifs, all of them containing a
@@ -24,7 +27,10 @@ max-line-length=120
 # Such comments are not always refer to the commit which adds them.
 # W0511 fixme: Used when a warning note as FIXME or XXX is detected.
 
-disable=invalid-name,missing-docstring,locally-disabled,no-else-return,fixme
+# It will often fail on methods that mention arguments only to match a signature
+# W0613 unused-argument: Used when a function or method argument is not used.
+
+disable=invalid-name,missing-docstring,locally-disabled,no-self-use,no-else-return,fixme,unused-argument
 
 [DESIGN]
 max-parents=13
