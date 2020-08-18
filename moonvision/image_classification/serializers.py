@@ -7,6 +7,8 @@ from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
 from rest_framework import serializers
 
+from moonvision.image_classification import models
+
 
 class Base64ImageField(serializers.ImageField):
     default_error_messages = {
@@ -34,6 +36,9 @@ class Base64ImageField(serializers.ImageField):
         return 'jpg' if extension == 'jpeg' else extension
 
 
-class ImageUploadSerializer(serializers.Serializer):  # pylint: disable=W0223 # we don't need abstract methods
+class ImageUploadSerializer(serializers.ModelSerializer):
     image = Base64ImageField(required=True)
-    model_type = serializers.CharField(required=True)  # TODO: Limit choices?
+
+    class Meta:
+        model = models.UploadedImage
+        fields = ('image', 'model_type')

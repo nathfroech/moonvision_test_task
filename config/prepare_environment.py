@@ -14,5 +14,5 @@ def prepare_environment() -> None:
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 
     # This allows easy placement of apps within the interior moonvision directory.
-    current_path = pathlib.Path(__file__).parent
-    sys.path.append(str(current_path.joinpath('moonvision')))
+    apps_path = pathlib.Path(__file__).parents[1] / 'moonvision'
+    sys.path.append(str(apps_path))
