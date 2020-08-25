@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  django:
+    # Ideally, there would be volumes for models and media files and a separate db service.
+    # But in our case media and db are not really important; and models are being downloaded on the fly.
+    # So I'm keeping it as simple as possible.
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: moonvision_django
+    ports:
+      - "8006:8000"

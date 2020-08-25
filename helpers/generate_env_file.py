@@ -43,7 +43,7 @@ PROJECT_ROOT = {base_dir}
 PROJECT_ENVIRONMENT = debug
 DJANGO_SETTINGS_MODULE = config.settings
 DJANGO_SECRET_KEY = {secret_key}
-ALLOWED_HOSTS = localhost,127.0.0.1
+DJANGO_ALLOWED_HOSTS = localhost,127.0.0.1
 
 # PostgreSQL
 # ------------------------------------------------------------------------------

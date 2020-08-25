@@ -12,4 +12,5 @@ requirements_dir="requirements"
 # version in requirements.
 pip install -U pip pip-tools
 pip-compile "${requirements_dir}/dev.in" -o "${requirements_dir}/dev.txt" --upgrade-package pip-tools --no-header -q
+pip-compile "${requirements_dir}/base.in" -o "${requirements_dir}/staging.txt" --upgrade-package pip-tools --no-header -q
 pip-sync "${requirements_dir}/dev.txt"
