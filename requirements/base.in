@@ -6,3 +6,5 @@ djangorestframework
 environs[django]
 
 Pillow
+
+torchvision

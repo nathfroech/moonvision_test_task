@@ -4,11 +4,6 @@ from rest_framework.response import Response
 from moonvision.image_classification import serializers
 
 
-def get_image_label(image: bytes, model_type: str) -> str:
-    # TODO: dummy function; implement it later
-    return 'dummy_label'
-
-
 class ImageUploadView(generics.CreateAPIView):
     http_method_names = ('post',)
     serializer_class = serializers.ImageUploadSerializer
@@ -26,6 +21,8 @@ class ImageUploadView(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        image_label = get_image_label(serializer.validated_data['image'], serializer.validated_data['model_type'])
+        classification_result = serializer.get_image_label()
+        serializer.instance.image_label = classification_result
+        serializer.instance.save(update_fields=('image_label',))
         headers = self.get_success_headers(serializer.data)
-        return Response({'image_label': image_label}, status=status.HTTP_200_OK, headers=headers)
+        return Response({'image_label': classification_result}, status=status.HTTP_200_OK, headers=headers)

@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
 from rest_framework import serializers
 
-from moonvision.image_classification import models
+from moonvision.image_classification import models, services
 
 
 class Base64ImageField(serializers.ImageField):
@@ -42,3 +42,17 @@ class ImageUploadSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.UploadedImage
         fields = ('image', 'model_type')
+
+    def get_image_label(self) -> str:
+        """
+        Classify an image and return a label for it.
+
+        We need a file path for classifier, so we should save an image somewhere. And since we have a model anyway,
+        we just require here that the serializer should be validated and its instance - saved.
+        (Note: check for validation is "hidden" inside `self.validated_data` property.)
+        """
+        if not self.instance:
+            msg = 'You must call `.save()` before calling `.get_image_label()`.'
+            raise AssertionError(msg)
+        image_classifier = services.ImageClassificationService(self.instance.model_type)
+        return image_classifier.classify_image(self.instance.image.path)

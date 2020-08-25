@@ -235,7 +235,7 @@ LOGGING = {
     'filters': {'require_debug_false': {'()': 'django.utils.log.RequireDebugFalse'}},
     'formatters': {
         'verbose': {
-            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s',  # noqa: WPS323
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s',
         },
     },
     'handlers': {
@@ -246,6 +246,10 @@ LOGGING = {
         },
     },
     'loggers': {
+        'debug': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
         'django.request': {
             'handlers': [],
             'level': 'ERROR',
@@ -258,3 +262,7 @@ LOGGING = {
         },
     },
 }
+
+# CUSTOM SETTINGS
+# ------------------------------------------------------------------------------
+SKIP_HEAVY_TESTS = env('SKIP_HEAVY_TESTS', True)

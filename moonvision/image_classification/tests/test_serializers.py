@@ -1,5 +1,7 @@
-from hamcrest import (  # type: ignore
+import pytest
+from hamcrest import (  # type: ignore # noqa: WPS235
     assert_that,
+    calling,
     contains_exactly,
     equal_to,
     has_entries,
@@ -7,6 +9,7 @@ from hamcrest import (  # type: ignore
     instance_of,
     is_,
     matches_regexp,
+    raises,
 )
 
 from django.core.files.base import ContentFile
@@ -78,3 +81,37 @@ class TestImageUploadSerializer:
         assert_that(serializer.errors, has_entries({
             'image': contains_exactly(equal_to('Upload a valid base64-encoded image.')),
         }))
+
+    def test_raises_error_on_requesting_image_label_without_data_validation(self, base64_image, classifier_mock):
+        data = {
+            'image': base64_image,
+            'model_type': 'test',
+        }
+        serializer = self.serializer_class(data=data)
+
+        assert_that(calling(serializer.get_image_label).with_args(), raises(AssertionError))
+
+    def test_raises_error_on_requesting_image_label_without_saved_instance(self, base64_image, classifier_mock):
+        data = {
+            'image': base64_image,
+            'model_type': 'test',
+        }
+        serializer = self.serializer_class(data=data)
+        serializer.is_valid()
+
+        assert_that(calling(serializer.get_image_label).with_args(), raises(AssertionError))
+
+    @pytest.mark.django_db
+    def test_returns_image_label_calling_classifier_service(self, base64_image, classifier_mock):
+        data = {
+            'image': base64_image,
+            'model_type': 'test',
+        }
+        serializer = self.serializer_class(data=data)
+        serializer.is_valid()
+        serializer.save()
+
+        image_label = serializer.get_image_label()
+
+        classifier_mock.assert_called_once_with('test')
+        assert_that(image_label, is_(equal_to('dummy_label')))
