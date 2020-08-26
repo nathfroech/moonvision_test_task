@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Dict, Tuple, Union
+from typing import Any, Dict, List, Tuple, Union
 
 import numpy as np
 import torch
@@ -59,6 +59,10 @@ class BaseImageClassificationService:
             ),
         )
         return imagenet_labels[highest_scores_indices[0]]
+
+    @classmethod
+    def get_model_choices(cls) -> List[Tuple[str, str]]:
+        return [(model, model) for model in cls.models]
 
 
 class ImageClassificationServiceTorch(BaseImageClassificationService):

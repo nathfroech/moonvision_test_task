@@ -20,7 +20,7 @@ class TestImageUploadView:
     def test_allows_to_upload_image(self, api_request_factory, base64_image, classifier_mock):
         data = {
             'image': base64_image.decode(),
-            'model_type': 'test',
+            'model_type': 'AlexNet',
         }
         request = api_request_factory.post(self.url, data)
 

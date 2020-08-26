@@ -56,7 +56,7 @@ class TestImageUploadSerializer:
     def test_validates_correct_data_and_decodes_image(self, base64_image):
         data = {
             'image': base64_image,
-            'model_type': 'test',
+            'model_type': 'AlexNet',
         }
         serializer = self.serializer_class(data=data)
 
@@ -65,7 +65,7 @@ class TestImageUploadSerializer:
         assert_that(is_valid)
         assert_that(serializer.validated_data, has_entries({
             'image': is_(instance_of(ContentFile)),
-            'model_type': 'test',
+            'model_type': 'AlexNet',
         }))
 
     def test_fail_validation_on_bad_image(self):
@@ -94,7 +94,7 @@ class TestImageUploadSerializer:
     def test_raises_error_on_requesting_image_label_without_saved_instance(self, base64_image, classifier_mock):
         data = {
             'image': base64_image,
-            'model_type': 'test',
+            'model_type': 'AlexNet',
         }
         serializer = self.serializer_class(data=data)
         serializer.is_valid()
@@ -105,7 +105,7 @@ class TestImageUploadSerializer:
     def test_returns_image_label_calling_classifier_service(self, base64_image, classifier_mock):
         data = {
             'image': base64_image,
-            'model_type': 'test',
+            'model_type': 'AlexNet',
         }
         serializer = self.serializer_class(data=data)
         serializer.is_valid()
@@ -113,5 +113,5 @@ class TestImageUploadSerializer:
 
         image_label = serializer.get_image_label()
 
-        classifier_mock.assert_called_once_with('test')
+        classifier_mock.assert_called_once_with('AlexNet')
         assert_that(image_label, is_(equal_to('dummy_label')))

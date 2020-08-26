@@ -38,6 +38,7 @@ class Base64ImageField(serializers.ImageField):
 
 class ImageUploadSerializer(serializers.ModelSerializer):
     image = Base64ImageField(required=True)
+    model_type = serializers.ChoiceField(choices=services.ImageClassificationService.get_model_choices())
 
     class Meta:
         model = models.UploadedImage
