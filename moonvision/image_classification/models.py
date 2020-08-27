@@ -1,6 +1,7 @@
 import uuid
 
 from django.db import models
+from django.utils.html import format_html
 
 
 def image_upload(instance: 'UploadedImage', filename: str) -> str:
@@ -28,3 +29,7 @@ class UploadedImage(models.Model):
                 model_type=self.model_type,
                 path=self.image.path,
             )
+
+    def image_tag(self) -> str:
+        return format_html('<img style="max-width: 100px; max-height: 100px" src="{0}"/>', self.image.url)
+    image_tag.short_description = 'Image'  # type: ignore
