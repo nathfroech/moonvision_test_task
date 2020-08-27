@@ -92,7 +92,6 @@ if PROJECT_ENVIRONMENT == ENVIRONMENT_DEBUG:
         'django_extensions',
     ]
 LOCAL_APPS = [
-    'moonvision.users.apps.UsersAppConfig',
     'moonvision.image_classification.apps.AppConfig',
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -105,7 +104,7 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
-AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = 'auth.User'  # pylint: disable=hard-coded-auth-user
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url
 LOGIN_REDIRECT_URL = 'users:redirect'
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
