@@ -12,6 +12,57 @@ MoonVision REST endpoint test task
 
 :License: MIT
 
+This project implements the REST endpoint for image classification. Enpoint is available on ``/upload-image/`` url and
+accepts POST requests with the following JSON data:
+
+.. code-block:: json
+
+    {
+        "model_type": "<any value from AlexNet, ResNet, DenseNet, GoogleNet, Inception3, MobileNetV2",
+        "image": "<base64-encoded image, either as a plain text or as a data uri>"
+    }
+
+There is a docker-compose file to run the project; just run::
+
+    $ docker-compose build
+    $ docker-compose up -d
+
+Alternatively, check the `Initial Setup`_ section for running the project locally.
+
+**Answers to the questions from the task.**
+
+    Did you see any difficulty in this API design? What would you change?
+
+The answer actually depends on how and by whom this endpoint will be used, but I'd consider two changes for this API:
+
+* If the endpoint is planned to be used by people who generally do not familiar
+  with image classification, it may be hard for them to choose the right model_type.
+  In this case it would probably be better to make this field optional or hide
+  it entirely and make this decision on server side instead.
+* It may be inconvenient that you will have to encode image before sending it.
+  There might be several approaches to simplify it:
+
+  * Let user to upload image directly as a part of multipart request.
+  * Accept an image url.
+  * Implement another endpoint which would accept either file or url and return
+    an encoded image.
+
+..
+
+  Explain in 4 sentences what you would do next to scale out this solution
+
+Of course, first of all we will need to decide if we need scaling at all and what do
+we need to scale - but there are two obvious parts in our API which may require scaling:
+django app itself and the image classification.
+
+For django app scaling there are some common techniques that could be used, like
+increasing HTTP server workers or using cache.
+
+As for the image classification - one of the obvious choices would be to make
+it work on GPU instead of CPU. Also it might make sense to make the classification
+process asynchronous, either by reimplementing this endpoint on some async framework
+or by using a queue and making an actual classification in some async task.
+
 Initial Setup
 -------------
 
