@@ -19,10 +19,18 @@ from moonvision.image_classification import serializers
 
 
 class TestBase64ImageField:
-    def test_base64_string_converted_to_image(self, base64_image):
+    def test_base64_bytestring_converted_to_image(self, base64_image):
         field = serializers.Base64ImageField()
 
         output = field.to_internal_value(base64_image)
+
+        assert_that(output, is_(instance_of(ContentFile)))
+        assert_that(output.name, matches_regexp(r'[a-z0-9-]{36}\.png'))
+
+    def test_base64_string_converted_to_image(self, base64_image):
+        field = serializers.Base64ImageField()
+
+        output = field.to_internal_value(base64_image.decode('utf-8'))
 
         assert_that(output, is_(instance_of(ContentFile)))
         assert_that(output.name, matches_regexp(r'[a-z0-9-]{36}\.png'))
@@ -31,7 +39,7 @@ class TestBase64ImageField:
         field = serializers.Base64ImageField()
 
         try:
-            field.to_internal_value(None)  # type: ignore
+            field.to_internal_value(None)
         except ValidationError as exception:
             assert_that(exception.detail, has_length(1))
             assert_that(str(exception.detail[0]), is_(equal_to('Upload a valid base64-encoded image.')))
@@ -48,6 +56,14 @@ class TestBase64ImageField:
             assert_that(str(exception.detail[0]), is_(equal_to('Upload a valid base64-encoded image.')))
         else:
             raise AssertionError('ValidationError has not been raised')
+
+    def test_data_uri_converted_to_image(self, base64_image):
+        field = serializers.Base64ImageField()
+
+        output = field.to_internal_value(b'data:image/png;base64,' + base64_image)  # noqa: WPS336
+
+        assert_that(output, is_(instance_of(ContentFile)))
+        assert_that(output.name, matches_regexp(r'[a-z0-9-]{36}\.png'))
 
 
 class TestImageUploadSerializer:

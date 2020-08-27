@@ -1,7 +1,8 @@
 import base64
+import contextlib
 import imghdr
 import uuid
-from typing import Optional
+from typing import Any, Optional, cast
 
 from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
@@ -15,14 +16,26 @@ class Base64ImageField(serializers.ImageField):
         'invalid_image': 'Upload a valid base64-encoded image.',
     }
 
-    def to_internal_value(self, data: bytes) -> ContentFile:
-        try:
-            decoded_file = base64.b64decode(data)
-        except TypeError:
+    def to_internal_value(self, data: Any) -> ContentFile:
+        if not isinstance(data, (str, bytes)):
             self.fail('invalid_image')
+        with contextlib.suppress(AttributeError):
+            data = data.encode('utf-8')
+        data = cast(bytes, data)
+        if data.startswith(b'data:'):
+            # It is a data uri; extract an encoded image from it
+            if b';base64,' not in data:
+                # We don't support anything else
+                self.fail('invalid_image')
+            # Note: I could use media type from the first part to get file extension. But I'll prefer to have a
+            # common approach for both cases just to keep thing simple.
+            _, data = data.split(b';base64,', 1)
+        decoded_file = base64.b64decode(data)
 
         file_name = str(uuid.uuid4())
         file_extension = self.get_file_extension(file_name, decoded_file)
+        if file_extension is None:
+            self.fail('invalid_image')
         file_name = '{0}.{1}'.format(file_name, file_extension)
         data = ContentFile(decoded_file, name=file_name)
 
