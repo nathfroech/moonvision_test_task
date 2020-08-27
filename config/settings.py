@@ -1,4 +1,10 @@
-"""Base settings to build other settings files upon."""
+"""
+Base settings.
+
+Note: Ideally, some settings (like SECRET_KEY or database settings, for example) wouldn't have default values to make
+sure they are correctly configured for each environment with explicit values in .env file or env variables.
+But this is just a test task, so it's fine to set defaults for simplicity.
+"""
 
 import pathlib
 from typing import Any, Dict, List, Tuple
@@ -10,7 +16,7 @@ env = environs.Env()
 env.read_env()
 
 # ('moonvision/config/settings.py'.parents[1] = 'moonvision/')
-ROOT_DIR = pathlib.Path(__file__).parents[1]
+ROOT_DIR = pathlib.Path(__file__).absolute().parents[1]
 APPS_DIR = ROOT_DIR / 'moonvision'
 
 # GENERAL
@@ -28,9 +34,9 @@ PROJECT_ENVIRONMENT = env(
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
 DEBUG = env.bool('DJANGO_DEBUG', PROJECT_ENVIRONMENT == ENVIRONMENT_DEBUG)
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
-SECRET_KEY = env('DJANGO_SECRET_KEY')
+SECRET_KEY = env('DJANGO_SECRET_KEY', '+lthv&-%k*sq&xe*29of!x(1oafd0n-s8yjfs7z!c(p)7m0^lq')
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS', default=[])
+ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS', default=['localhost', '127.0.0.1'])
 
 # Local time zone. Choices are
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -52,7 +58,7 @@ USE_TZ = True
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
-    'default': env.dj_db_url('DATABASE_URL'),
+    'default': env.dj_db_url('DATABASE_URL', 'sqlite:///{0}'.format(ROOT_DIR / 'moonvision.sqlite')),
 }
 
 # CACHES

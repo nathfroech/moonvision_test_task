@@ -6,5 +6,5 @@ from django.urls import include, path
 urlpatterns = [
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
-    path('', include('image_classification.urls')),
+    path('', include('moonvision.image_classification.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
