@@ -99,9 +99,6 @@ compile \*.txt files and synchronize local environment.
 For requirements installation in CI or production environments it is enough to simply call ``pip install -r
 requirements/<file_name>.txt``.
 
-For compatibility with traditional project structure there is also ``requirements.txt`` file at project root, which
-simply links to ``requirements/production.txt``.
-
 Setting Up Your Users
 `````````````````````
 
